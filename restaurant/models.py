@@ -12,3 +12,11 @@ class Feedback(models.Model):
     rating = models.IntegerField()
     description = models.CharField(max_length=250)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
+
+class Profile(models.Model):
+    ROLE_CHOICES = [
+        ('admin', 'Admin'),
+        ('user', 'User'),
+    ]
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='user')
