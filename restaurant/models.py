@@ -2,10 +2,13 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
+class Category(models.model):
+    name = models.CharField(max_length=50)
+
 class Dish(models.Model):
     price = models.IntegerField()
     name = models.CharField(max_length=50)
-    category = models.CharField(max_length=50)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     description = models.TextField()
     
 
@@ -26,4 +29,4 @@ class Profile(models.Model):
 
 class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    dishes = models.ManyToManyField(Dish) 
+    dishes = models.ManyToManyField(Dish)
