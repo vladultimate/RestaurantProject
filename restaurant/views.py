@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login
-from django.views.generic import CreateView, FormView
+from django.views.generic import CreateView, FormView, TemplateView
 from django.urls import reverse_lazy, reverse
 from .forms import LoginForm
 
@@ -27,3 +27,7 @@ class LoginView(FormView):
         else:
             form.add_error(None, 'Невірний логін або пароль')
             return self.form_invalid(form)
+
+
+class HomeView(TemplateView):
+    template_name = 'home.html'
