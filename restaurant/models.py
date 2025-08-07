@@ -15,6 +15,7 @@ class Dish(models.Model):
 class Feedback(models.Model):
     rating = models.IntegerField()
     description = models.CharField(max_length=250)
+    dishes = models.ManyToManyField(Dish)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
@@ -29,4 +30,8 @@ class Profile(models.Model):
 
 class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    dishes = models.ManyToManyField(Dish)
+
+class CartItem(models.Model):
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    dish = models.ForeignKey(Dish, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=1)
