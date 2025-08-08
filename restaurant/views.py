@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login
 from django.views.generic import CreateView, FormView, TemplateView
 from django.urls import reverse_lazy, reverse
 from .forms import LoginForm
+from .models import Dish
 
 
 # Create your views here.
@@ -31,3 +32,11 @@ class LoginView(FormView):
 
 class HomeView(TemplateView):
     template_name = 'home.html'
+
+class MenuView(TemplateView):
+    template_name = "menu.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['dishes'] = Dish.objects.all()  
+        return context

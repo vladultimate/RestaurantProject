@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-class Category(models.model):
+class Category(models.Model):
     name = models.CharField(max_length=50)
 
 class Dish(models.Model):
@@ -10,6 +10,7 @@ class Dish(models.Model):
     name = models.CharField(max_length=50)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     description = models.TextField()
+    image = models.ImageField(blank=True, upload_to='images')
     
 
 class Feedback(models.Model):

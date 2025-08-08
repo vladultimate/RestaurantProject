@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Меню</title>
+    <style>
+        body {
+            background: rgb(255, 255, 219);
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        header {
+            background: linear-gradient(135deg, #FFD54F 0%, #FFB300 100%);
+            padding: 15px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(255, 181, 0, 0.4);
+        }
+
+        .catalog {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .card {
+            width: 280px;
+            background: linear-gradient(135deg, #FFD54F 0%, #FFB300 100%);
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(255, 181, 0, 0.4);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-content {
+            padding: 15px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card h3 {
+            margin: 0 0 10px 0;
+            font-size: 20px;
+            text-align: center;
+        }
+
+        .card p {
+            font-size: 14px;
+            flex-grow: 1;
+            text-align: center;
+        }
+
+        .price {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 10px 0;
+            text-align: center;
+        }
+
+        .availability {
+            font-size: 14px;
+            color: green;
+            text-align: left;
+        }
+
+        form {
+            text-align: left;
+            padding-bottom: 15px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 8px;
+            color: white;
+            text-decoration: none;
+            background-color: #FF9800;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #F57C00;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        🍽 Меню
+    </header>
+
+    <div class="catalog">
+        {% for dish in dishes %}
+        <div class="card">
+            <div class="card-content">
+                <h3>{{ dish.name }}</h3>
+                <p>{{ dish.description }}</p>
+                <div class="price">{{ dish.price }} грн</div>
+                <div class="availability">В наявності</div>
+            </div>
+        </div>
+        {% empty %}
+        <p>Немає страв</p>
+        {% endfor %}
+    </div>
+</body>
+</html>
