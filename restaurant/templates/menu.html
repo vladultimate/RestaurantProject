@@ -100,6 +100,7 @@
         {% for dish in dishes %}
         <div class="card">
             <div class="card-content">
+                <img src="{{ dish.image.url }}">
                 <h3>{{ dish.name }}</h3>
                 <p>{{ dish.description }}</p>
                 <div class="price">{{ dish.price }} грн</div>
