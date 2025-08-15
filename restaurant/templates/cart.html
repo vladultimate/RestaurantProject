@@ -2,7 +2,7 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <title>Меню</title>
+    <title>Кошик</title>
     <style>
         body {
             background: rgb(255, 255, 219);
@@ -70,11 +70,6 @@
             text-align: left;
         }
 
-        form {
-            text-align: left;
-            padding-bottom: 15px;
-        }
-
         .btn {
             display: inline-block;
             padding: 10px 20px;
@@ -89,36 +84,38 @@
         .btn:hover {
             background-color: #F57C00;
         }
+
+        .total {
+            font-size: 20px;
+            font-weight: bold;
+            text-align: right;
+            margin: 20px;
+        }
     </style>
 </head>
 <body>
     <header>
-        🍽 Меню
+        🛒 Ваш кошик
     </header>
 
     <div class="catalog">
-        {% for dish in dishes %}
+        {% for item in cart_items %}
         <div class="card">
             <div class="card-content">
-                <img src="{{ dish.image.url }}" alt="{{ dish.name }}">
-                <h3>{{ dish.name }}</h3>
-                <p>{{ dish.description }}</p>
-                <div class="price">{{ dish.price }} грн</div>
+                <h3>{{ item.dish.name }}</h3>
+                <p>{{ item.dish.description }}</p>
+                <img src="{{ item.dish.image }}" alt="{{ item.dish.name }}">
+                <div class="price">{{ item.dish.price }} грн × {{ item.quantity }}</div>
                 <div class="availability">В наявності</div>
-                <form action="{% url 'add_to_cart' %}" method="post">
-                    {% csrf_token %}
-                    <input type="hidden" name="dish_id" value="{{ dish.id }}">
-                    <input type="number" name="quantity" value="1" min="1">
-                    {% if not request.user.is_authenticated %}
-                        <input type="text" name="phone" placeholder="Ваш телефон" required>
-                    {% endif %}
-                    <button type="submit" class="btn">Додати в кошик</button>
-                </form>
             </div>
         </div>
         {% empty %}
-        <p>Немає страв</p>
+        <p>Кошик порожній</p>
         {% endfor %}
     </div>
+
+    {% if cart_items %}
+    <div class="total">Загальна сума: {{ total_price }} грн</div>
+    {% endif %}
 </body>
 </html>
