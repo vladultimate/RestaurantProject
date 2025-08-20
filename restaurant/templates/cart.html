@@ -116,6 +116,9 @@
 
     {% if cart_items %}
     <div class="total">Загальна сума: {{ total_price }} грн</div>
+    <div style="text-align: right; margin: 0 20px 20px 20px;">
+        <a href="{% url 'checkout' %}" class="btn">Оформити замовлення</a>
+    </div>
     {% endif %}
 </body>
 </html>

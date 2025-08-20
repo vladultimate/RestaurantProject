@@ -105,6 +105,7 @@
                 <p>{{ dish.description }}</p>
                 <div class="price">{{ dish.price }} грн</div>
                 <div class="availability">В наявності</div>
+                <div class="price">{{ dish.price }} грн</div>
                 <form action="{% url 'add_to_cart' %}" method="post">
                     {% csrf_token %}
                     <input type="hidden" name="dish_id" value="{{ dish.id }}">
@@ -119,6 +120,11 @@
         {% empty %}
         <p>Немає страв</p>
         {% endfor %}
+        {% if request.user.is_authenticated %}
+            {% if user.profile.role == 'admin' %}
+                <a href="{% url 'create_dish' %}" class="btn-menu">Створити їжу</a>
+            {% endif %}
+        {% endif %}
     </div>
 </body>
 </html>

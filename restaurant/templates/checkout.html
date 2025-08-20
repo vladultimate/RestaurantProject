@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Оформлення замовлення</title>
+    <style>
+        body {
+            background: rgb(255, 255, 219);
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            width: 400px;
+            margin: 50px auto;
+            background: linear-gradient(135deg, #FFD54F 0%, #FFB300 100%);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(255, 181, 0, 0.4);
+        }
+        h1 {
+            text-align: center;
+        }
+        .btn {
+            background: #FF9800;
+            border: none;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background: #F57C00;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Оформлення замовлення</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn">📦 Підтвердити</button>
+        </form>
+    </div>
+</body>
+</html>

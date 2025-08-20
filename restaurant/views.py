@@ -1,11 +1,11 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import CreateView, FormView, TemplateView, View
 from django.urls import reverse_lazy, reverse
-from .forms import GuestCartForm
-from .forms import LoginForm
-from .models import Dish, Cart, CartItem
+from .forms import GuestCartForm, LoginForm, CheckoutForm, DishForm, CategoryForm
+from .models import Dish, Cart, CartItem, Category
 
 
 # Create your views here.
@@ -88,3 +88,35 @@ class CartView(View):
             "cart_items": cart_items,
             "total_price": total_price
         })
+    
+class CheckoutView(FormView):
+    template_name = "checkout.html"
+    form_class = CheckoutForm
+    success_url = reverse_lazy("order_success")
+
+    def form_valid(self, form):
+        address = form.cleaned_data["address"]
+
+        return super().form_valid(form)
+    
+class DishCreateView(LoginRequiredMixin, CreateView):
+    model = Dish
+    form_class = DishForm
+    template_name = 'create_dish.html'
+    success_url = '/menu/' 
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.profile.role != 'admin':
+            return redirect('home')
+        return super().dispatch(request, *args, **kwargs)
+    
+class CategoryCreateView(LoginRequiredMixin, CreateView):
+    model = Category
+    form_class = CategoryForm
+    template_name = 'create_category.html'
+    success_url = '/menu/' 
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.profile.role != 'admin':
+            return redirect('home')
+        return super().dispatch(request, *args, **kwargs)

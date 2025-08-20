@@ -1,4 +1,5 @@
 from django import forms
+from .models import Dish, Category
 
 class LoginForm(forms.Form):
     username = forms.CharField(max_length=100)
@@ -18,3 +19,13 @@ class CheckoutForm(forms.Form):
             "placeholder": "Введіть вашу адресу"
         })
     )
+
+class DishForm(forms.ModelForm):
+    class Meta:
+        model = Dish
+        fields = ['name', 'price', 'category', 'description', 'image']
+
+class CategoryForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = ['name']
