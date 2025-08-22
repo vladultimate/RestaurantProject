@@ -16,8 +16,19 @@
             text-align: center;
             font-size: 24px;
             font-weight: bold;
+            justify-content: space-between;
             color: #333;
-            box-shadow: 0 4px 10px rgba(255,181,0,0.4);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+        }
+
+        header .logo {
+            font-size: 26px;
+        }
+
+        header .contacts {
+            font-size: 14px;
+            font-weight: normal;
+            color: #222;
         }
 
         .catalog {
@@ -129,7 +140,22 @@
             border-radius: 8px;
             border: 1px solid #ccc;
         }
+        
+         header {
+            background: linear-gradient(135deg, #FFD54F 0%, #FFB300 100%);
+            padding: 16px;
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            color: #333;
+            box-shadow: 0 4px 12px rgba(255,181,0,0.45);
+            letter-spacing: 1px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
 
+        
         .btn {
             display: block;
             width: 100%;
@@ -148,6 +174,22 @@
             text-transform: uppercase;
         }
 
+        .btnadd {
+            display: block;
+            width: 100%;
+            padding: 12px 0;
+            border-radius: 9px;
+            font-size: 14px;
+            font-weight: bold;
+            color: white;
+            text-align: center;
+            background: linear-gradient(135deg, #FF6F00 0%, #FF9800 100%);
+            border: none;
+            cursor: pointer;
+            margin-top: auto;
+            text-transform: uppercase;
+        }
+
         .btn:hover {
             background: linear-gradient(135deg, #FF8F00 0%, #FFB74D 100%);
         }
@@ -155,7 +197,7 @@
             position: absolute;
             top: 8px;      
             right: 8px;      
-            background: rgba(247, 225, 225, 0.2);
+            background: rgba(255, 125, 125, 0.2);
             color: white;
             border: none;
             border-radius: 50%;
@@ -173,12 +215,18 @@
             transform: scale(1.1);
         }
 
-
+        .submit:hover {
+            background: linear-gradient(135deg, #ff8f00, #ffb74d);
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 <body>
     <header>
-        🍽 Меню
+        <div class="logo">🍽 Меню</div>
+        <div class="contacts">
+            📞 +3808888888 | ✉ brawlstars@gmail.com
+        </div>
     </header>
 
     <div class="catalog">
@@ -191,6 +239,7 @@
             <h2>{{ dish.name }}</h2>
             <div class="card-content">
                 <p>{{ dish.description }}</p>
+                <p>{{ dish.category.name }}</p>
                 <div class="price">{{ dish.price }} грн</div>
                 {% if request.user.is_authenticated %}
                     {% if user.profile.role == 'admin' %}
@@ -215,8 +264,8 @@
         {% endfor %}
         {% if request.user.is_authenticated %}
             {% if user.profile.role == 'admin' %}
-                <a href="{% url 'create_dish' %}" class="submit">Створити їжу</a>
-                <a href="{% url 'create_category' %}" class="submit">Створити Категорію</a>
+                <a href="{% url 'create_dish' %}" class="btnadd">Створити їжу</a>
+                <a href="{% url 'create_category' %}" class="btnadd">Створити Категорію</a>
             {% endif %}
         {% endif %}
     </div>

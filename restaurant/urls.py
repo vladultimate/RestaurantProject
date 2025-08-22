@@ -1,6 +1,6 @@
 from django.urls import path
 from django.conf import settings
-from .views import RegisterView, LoginView, HomeView, MenuView, CartView, AddToCartView, CheckoutView, DishCreateView, CategoryCreateView, AdminOrdersView, DishEditView, DishDeleteView
+from .views import RegisterView, LoginView, HomeView, MenuView, CartView, AddToCartView, CheckoutView, DishCreateView, CategoryCreateView, AdminOrdersView, DishEditView, DishDeleteView, CategoryDeleteView
 from django.conf.urls.static import static
 
 urlpatterns = [
@@ -15,6 +15,7 @@ urlpatterns = [
     path('create-category/', CategoryCreateView.as_view(), name='create_category'),
     path('admin-orders/', AdminOrdersView.as_view(), name='admin_orders'),
     path('<int:pk>/edit/', DishEditView.as_view(), name='edit_dish'),
+    path('<int:pk>/edit/', CategoryDeleteView.as_view(), name='delete_category'),
     path('<int:pk>/delete/', DishDeleteView.as_view(), name='delete_dish'),
 ]
 

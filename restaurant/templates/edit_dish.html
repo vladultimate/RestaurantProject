@@ -89,11 +89,11 @@
 
 <div class="container">
     <div class="card">
-        <h2>Додати страву</h2>
+        <h2>Змінити Страву</h2>
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit" class="btn">Створити</button>
+            <button type="submit" class="btn">Змінити</button>
         </form>
     </div>
 </div>

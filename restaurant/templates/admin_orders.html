@@ -6,77 +6,140 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: #fff8dc;
+            background: #fffbe5;
+            margin: 0;
             padding: 20px;
         }
-        table {
-            width: 100%;
-            border-collapse: collapse;
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .order-card {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+            padding: 20px;
             margin-bottom: 20px;
         }
-        th, td {
-            padding: 10px;
-            border: 1px solid #ccc;
-            text-align: left;
+
+        .order-header {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 12px;
         }
-        th {
-            background: #ffd54f;
+
+        .order-header span {
+            font-weight: normal;
+            color: #555;
+            font-size: 14px;
         }
-        tr:nth-child(even) {
+
+        .order-items {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 12px;
+            border-radius: 12px;
             background: #fff2b2;
         }
-        .btn-confirm {
-            background: #4caf50;
-            color: white;
-            padding: 5px 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
+
+        .order-item div {
+            flex: 1;
+            text-align: center;
         }
+
+        .order-item div:first-child { text-align: left; flex: 2; }
+
+        .btn-confirm {
+            display: block;
+            width: 100%;
+            padding: 12px 0;
+            border-radius: 9px;
+            font-size: 14px;
+            font-weight: bold;
+            color: white;
+            text-align: center;
+            background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%);
+            border: none;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: background 0.3s, transform 0.2s;
+        }
+
         .btn-confirm:hover {
-            background: #45a049;
+            background: linear-gradient(135deg, #45a049 0%, #57a957 100%);
+            transform: translateY(-2px);
+        }
+
+        .confirmed {
+            display: block;
+            text-align: center;
+            font-weight: bold;
+            color: green;
+            padding: 12px 0;
+        }
+
+        .order-header, .order-item div {
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
-    <h1>Список Замовлень</h1>
 
-    {% for order_info in orders_data %}
-    <h2>Замовлення #{{ order_info.order.id }} - 
-        {% if order_info.order.user %}{{ order_info.order.user.username }}{% else %}Guest{% endif %} 
-        ({{ order_info.order_total }} грн)
-    </h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Страва</th>
-                <th>Кількість</th>
-                <th>Ціна</th>
-                <th>Сума</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for item in order_info.items %}
-            <tr>
-                <td>{{ item.dish.name }}</td>
-                <td>{{ item.quantity }}</td>
-                <td>{{ item.dish.price }} грн</td>
-                <td>{{ item.total }} грн</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <form method="post">
+<h1>Список Замовлень</h1>
+
+{% for order_info in orders_data %}
+<div class="order-card" style="max-width:600px; margin:20px auto; padding:15px;">
+    <div class="order-header">
+        Замовлення #{{ order_info.order.id }} - 
+        {% if order_info.order.user %}
+            {{ order_info.order.user.username }}<br>
+            <span>Номер: {{ order_info.order.phone }}</span>
+        {% else %}
+            Guest
+        {% endif %}
+        <br>
+        <span>Сума: {{ order_info.order_total }} грн</span>
+    </div>
+
+    <div class="order-items">
+        <div class="order-item header" style="display:flex; gap:10px; font-weight:bold;">
+            <div style="flex:2;">Страва</div>
+            <div style="flex:1;">К-ть</div>
+            <div style="flex:1;">Ціна</div>
+            <div style="flex:1;">Сума</div>
+        </div>
+        {% for item in order_info.items %}
+        <div class="order-item" style="display:flex; gap:10px; background:#fff2b2; border-radius:8px; padding:5px;">
+            <div style="flex:2;">{{ item.dish.name }}</div>
+            <div style="flex:1; text-align:center;">{{ item.quantity }}</div>
+            <div style="flex:1; text-align:center;">{{ item.dish.price }} грн</div>
+            <div style="flex:1; text-align:center;">{{ item.total }} грн</div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <form method="post" style="margin-top:10px;">
         {% csrf_token %}
         <input type="hidden" name="order_id" value="{{ order_info.order.id }}">
         {% if order_info.order.status != "confirmed" %}
-        <button type="submit" class="btn-confirm">✅ Підтвердити замовлення</button>
+            <button type="submit" class="btn-confirm" style="width:auto; padding:8px 20px;">✅ Підтвердити</button>
         {% else %}
-        <span>✅ Підтверджено</span>
+            <span class="confirmed">✅ Підтверджено</span>
         {% endif %}
     </form>
-    {% empty %}
-    <p>Немає замовлень</p>
-    {% endfor %}
+</div>
+{% empty %}
+<p>Немає замовлень</p>
+{% endfor %}
+
 </body>
 </html>

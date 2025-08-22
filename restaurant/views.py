@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import CreateView, FormView, TemplateView, View, UpdateView, DeleteView
 from django.urls import reverse_lazy, reverse
-from .forms import GuestCartForm, LoginForm, CheckoutForm, DishForm, CategoryForm, DishEditForm
+from .forms import GuestCartForm, LoginForm, CheckoutForm, DishForm, CategoryForm, DishEditForm, CategoryEditForm
 from .models import Dish, Cart, CartItem, Category, Order, OrderItem
 
 
@@ -102,14 +102,12 @@ class CheckoutView(View):
             address = form.cleaned_data["address"]
             phone = form.cleaned_data["phone"]
 
-            # створюємо замовлення
             order = Order.objects.create(
                 user=request.user if request.user.is_authenticated else None,
                 address=address,
                 phone=phone
             )
 
-            # --- Зареєстрований користувач ---
             if request.user.is_authenticated:
                 cart_items = CartItem.objects.filter(cart__user=request.user)
                 for item in cart_items:
@@ -118,11 +116,9 @@ class CheckoutView(View):
                         dish=item.dish,
                         quantity=item.quantity
                     )
-                # очищаємо корзину
                 cart_items.delete()
                 Cart.objects.filter(user=request.user).delete()  # опціонально видалити сам Cart
 
-            # --- Гість через сесію ---
             else:
                 session_cart = request.session.get("cart", [])
                 for item in session_cart:
@@ -135,13 +131,12 @@ class CheckoutView(View):
                     )
                 request.session["cart"] = []
 
-            # рахуємо загальну суму
             order.total_price = sum(
                 oi.dish.price * oi.quantity for oi in order.items.all()
             )
             order.save()
 
-            return redirect("home")  # сторінка "Дякуємо за замовлення"
+            return redirect("home") 
 
         return render(request, self.template_name, {"form": form})
     
@@ -200,10 +195,20 @@ class AdminOrdersView(View):
 class DishEditView(UpdateView):
     model = Dish
     form_class = DishEditForm
-    template_name = 'create_dish.html'
+    template_name = 'edit_dish.html'
     success_url = reverse_lazy('menu')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['dish'] = self.object 
+        return context
 
 class DishDeleteView(DeleteView):
     model = Dish
+    template_name = 'confirm_delete.html'
+    success_url = reverse_lazy('menu')
+
+class CategoryDeleteView(DeleteView):
+    model = Category
     template_name = 'confirm_delete.html'
     success_url = reverse_lazy('menu')
