@@ -1,0 +1,9 @@
+
+{% block content %}
+  <h2>Видалити "{{ object.name }}"?</h2>
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit">Так, видалити</button>
+    <a href="{% url 'menu' %}">Скасувати</a>
+  </form>
+{% endblock %}

@@ -5,90 +5,175 @@
     <title>Меню</title>
     <style>
         body {
-            background: rgb(255, 255, 219);
+            background: #fffbe5;
             margin: 0;
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
         }
 
         header {
             background: linear-gradient(135deg, #FFD54F 0%, #FFB300 100%);
-            padding: 15px;
+            padding: 12px;
             text-align: center;
             font-size: 24px;
             font-weight: bold;
-            box-shadow: 0 4px 10px rgba(255, 181, 0, 0.4);
+            color: #333;
+            box-shadow: 0 4px 10px rgba(255,181,0,0.4);
         }
 
         .catalog {
             display: flex;
             flex-wrap: wrap;
-            justify-content: flex-start;
-            gap: 20px;
-            padding: 20px;
+            gap: 12px;
+            padding: 10px;
         }
 
         .card {
             width: 280px;
-            background: linear-gradient(135deg, #FFD54F 0%, #FFB300 100%);
-            border-radius: 20px;
-            box-shadow: 0 4px 15px rgba(255, 181, 0, 0.4);
-            overflow: hidden;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
             display: flex;
             flex-direction: column;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.25);
+        }
+
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+            margin: 0;
+            border-top-left-radius: 16px;
+            border-top-right-radius: 16px;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover img {
+            transform: scale(1.05);
         }
 
         .card-content {
-            padding: 15px;
-            flex-grow: 1;
+            padding: 6px 10px;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            flex-grow: 1;
         }
 
         .card h3 {
-            margin: 0 0 10px 0;
+            margin: 0 0 4px 0;
             font-size: 20px;
+            font-weight: bold;
+            color: #222;
             text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .card p {
-            font-size: 14px;
-            flex-grow: 1;
-            text-align: center;
+            margin: 0 0 6px 0;
+            font-size: 13px;
+            color: #666;
+            line-height: 1.3;
         }
 
         .price {
-            font-size: 18px;
+            display: inline-block;
+            background: linear-gradient(135deg, #FF9800 0%, #FF6F00 100%);
+            color: white;
             font-weight: bold;
-            margin: 10px 0;
+            font-size: 16px;
+            padding: 6px 12px;
+            border-radius: 16px;
             text-align: center;
+            margin: 6px auto;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .price::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255,255,255,0.2);
+            transform: rotate(25deg);
+            transition: all 0.5s;
         }
 
         .availability {
-            font-size: 14px;
+            font-size: 13px;
             color: green;
-            text-align: left;
+            text-align: center;
+            margin-bottom: 8px;
         }
 
         form {
-            text-align: left;
-            padding-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        input[type="number"],
+        input[type="text"] {
+            padding: 6px;
+            font-size: 13px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
         }
 
         .btn {
-            display: inline-block;
-            padding: 10px 20px;
-            border-radius: 8px;
+            display: block;
+            width: 100%;
+            padding: 12px 0;
+            border-bottom-left-radius: 16px;
+            border-bottom-right-radius: 16px;
+            font-size: 14px;
+            font-weight: bold;
             color: white;
-            text-decoration: none;
-            background-color: #FF9800;
+            text-align: center;
+            background: linear-gradient(135deg, #FF6F00 0%, #FF9800 100%);
             border: none;
             cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+            margin-top: auto;
+            text-transform: uppercase;
         }
 
         .btn:hover {
-            background-color: #F57C00;
+            background: linear-gradient(135deg, #FF8F00 0%, #FFB74D 100%);
         }
+        .delete-btn {
+            position: absolute;
+            top: 8px;      
+            right: 8px;      
+            background: rgba(247, 225, 225, 0.2);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            opacity: 0;     
+            transition: opacity 0.2s, transform 0.2s;
+        }
+
+        .card:hover .delete-btn {
+            opacity: 1;   
+            transform: scale(1.1);
+        }
+
+
     </style>
 </head>
 <body>
@@ -99,14 +184,23 @@
     <div class="catalog">
         {% for dish in dishes %}
         <div class="card">
+            <img src="{{ dish.image.url }}" alt="{{ dish.name }}">
+            {% if request.user.is_authenticated and user.profile.role == 'admin' %}
+                <button class="delete-btn" onclick="location.href='{% url 'delete_dish' dish.id %}'">×</button>
+            {% endif %}
+            <h2>{{ dish.name }}</h2>
             <div class="card-content">
-                <img src="{{ dish.image.url }}" alt="{{ dish.name }}">
-                <h3>{{ dish.name }}</h3>
                 <p>{{ dish.description }}</p>
                 <div class="price">{{ dish.price }} грн</div>
-                <div class="availability">В наявності</div>
-                <div class="price">{{ dish.price }} грн</div>
-                <form action="{% url 'add_to_cart' %}" method="post">
+                {% if request.user.is_authenticated %}
+                    {% if user.profile.role == 'admin' %}
+                        <form method="get" action="{% url 'edit_dish' dish.id %}">
+                            <a href="{% url 'edit_dish' dish.id %}" >Редагувати</a>
+                        </form>
+                    {% endif %}
+                {% endif %}
+            </div>
+            <form action="{% url 'add_to_cart' %}" method="post">
                     {% csrf_token %}
                     <input type="hidden" name="dish_id" value="{{ dish.id }}">
                     <input type="number" name="quantity" value="1" min="1">
@@ -115,14 +209,14 @@
                     {% endif %}
                     <button type="submit" class="btn">Додати в кошик</button>
                 </form>
-            </div>
         </div>
         {% empty %}
         <p>Немає страв</p>
         {% endfor %}
         {% if request.user.is_authenticated %}
             {% if user.profile.role == 'admin' %}
-                <a href="{% url 'create_dish' %}" class="btn-menu">Створити їжу</a>
+                <a href="{% url 'create_dish' %}" class="submit">Створити їжу</a>
+                <a href="{% url 'create_category' %}" class="submit">Створити Категорію</a>
             {% endif %}
         {% endif %}
     </div>
