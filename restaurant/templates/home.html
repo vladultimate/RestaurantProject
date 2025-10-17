@@ -3,81 +3,285 @@
 <head>
     <meta charset="UTF-8">
     <title>Головна сторінка</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background: rgb(255, 255, 219);
-            min-height: 100vh;
+            background: #fafafa;
             margin: 0;
-            display: flex;
-            flex-direction: column;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            color: #333;
         }
 
         header {
             background: linear-gradient(135deg, #FFD54F 0%, #FFB300 100%);
-            padding: 20px;
-            border-radius: 0 0 25px 25px;
-            box-shadow: 0 4px 15px rgba(255, 181, 0, 0.4);
+            padding: 20px 40px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            color: #222;
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
 
         header h1 {
             margin: 0;
+            font-size: 28px;
             font-weight: bold;
         }
 
-        .auth-buttons a {
-            margin-left: 10px;
-            border-radius: 10px;
-            padding: 8px 16px;
+        .auth-buttons {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .auth-buttons a, .auth-buttons span {
+            font-weight: bold;
+            font-size: 14px;
             text-decoration: none;
+            padding: 10px 18px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
         }
 
         .btn-success {
-            background-color: #FF9800;
+            background: linear-gradient(135deg, #FF6F00 0%, #FF9800 100%);
             color: white;
-            border: none;
         }
 
         .btn-success:hover {
-            background-color: #F57C00;
-            color: white;
+            background: linear-gradient(135deg, #FF8F00 0%, #FFB74D 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.25);
         }
 
         .btn-secondary {
-            background-color: #2c2c3c;
+            background: #2c2c3c;
             color: white;
-            border: none;
         }
 
-        main {
-            flex: 1;
+        .btn-secondary:hover {
+            background: #3b3b50;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+        }
+
+        .gray-square {
+            background: linear-gradient(135deg, #fffbe5, #fff2cc);
+            width: 100%;
+            height: 40vh; 
             display: flex;
             justify-content: center;
             align-items: center;
+            font-size: 26px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 40px;
+            text-align: center;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.05);
         }
 
-        .menu-button {
-            font-size: 20px;
-            padding: 15px 30px;
-            border-radius: 15px;
+        main {
+            padding: 40px 20px 60px;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .section-title {
+            font-size: 26px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #444;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 24px;
+            margin-top: 20px;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 18px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 10px 22px rgba(0,0,0,0.2);
+        }
+
+        .card-image img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .card-content {
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .card-content h3 {
+            margin: 0 0 8px 0;
+            font-size: 19px;
+            font-weight: bold;
+            color: #222;
+        }
+
+        .card-content p {
+            font-size: 14px;
+            color: #555;
+            flex-grow: 1;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 12px;
+        }
+
+        .price {
+            font-weight: bold;
+            color: #ff6f00;
+            font-size: 16px;
+        }
+
+        .btn-order {
+            padding: 6px 14px;
+            background: linear-gradient(135deg, #FF6F00 0%, #FF9800 100%);
+            color: white;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 13px;
+            transition: all 0.3s;
+        }
+
+        .btn-order:hover {
+            background: linear-gradient(135deg, #FF8F00 0%, #FFB74D 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+        }
+
+        .btn-main {
+            display: block;
+            width: 240px;
+            margin: 50px auto 0 auto;
+            padding: 15px 0;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%);
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            font-size: 18px;
+            transition: all 0.3s;
+        }
+
+        .btn-main:hover {
+            background: linear-gradient(135deg, #45a049 0%, #57a957 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+        }
+
+        .btn-main1 {
+            display: block;
+            width: 240px;
+            margin: 50px auto 0 auto;
+            padding: 15px 0;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #dd2a2a 0%, #bb6666 100%);
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            font-size: 18px;
+            transition: all 0.3s;
+        }
+
+        .btn-main1:hover {
+            background: linear-gradient(135deg, #551610 0%, #7e1919 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+        }
+        .auth-buttons button.btn-secondary {
+            background: #2c2c3c;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            text-decoration: none;
+            padding: 10px 18px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .auth-buttons button.btn-secondary:hover {
+            background: #3b3b50;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.25);
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>Головна сторінка</h1>
+        <h1>🍴 Головна</h1>
         <div class="auth-buttons">
             {% if not request.user.is_authenticated %}
-                <a href="{% url 'register' %}" class="btn btn-success">Зареєструватися</a>
-                <a href="{% url 'login' %}" class="btn btn-secondary">Увійти</a>
+                <a href="{% url 'register' %}" class="btn-success">Зареєструватися</a>
+                <a href="{% url 'login' %}" class="btn-secondary">Увійти</a>
             {% else %}
-                <span>Привіт, {{ request.user.username }}!</span>
+                <span>👋 Привіт, {{ request.user.username }}!</span>
+                <form method="post" action="{% url 'logout' %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-secondary">Вийти</button>
+                </form>
             {% endif %}
-            <a href="{% url 'menu' %}" class="btn-menu">Меню</a>
         </div>
     </header>
+
+
+    <div class="gray-square">
+        Завітай до нас! 🎉  
+        <br>Для зареєстрованих користувачів знижка <span style="color:#ff6f00;">10%</span>
+    </div>
+
+    <main>
+        <div class="section-title">Популярні страви</div>
+        <div class="cards">
+            {% for dish in popular_dishes %}
+            <div class="card">
+                <div class="card-image">
+                    <img src="{{ dish.image.url }}" alt="{{ dish.name }}">
+                </div>
+                <div class="card-content">
+                    <h3>{{ dish.name }}</h3>
+                    <p>{{ dish.description|truncatechars:80 }}</p>
+                    <div class="card-footer">
+                        <span class="price">{{ dish.price }} грн</span>
+                        <a href="{% url 'menu' %}" class="btn-order">Замовити</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <a href="{% url 'menu' %}" class="btn-main">Перейти до меню</a>
+        {% if request.user.is_authenticated and user.profile.role == 'admin' %}
+            <a href="{% url 'admin_orders' %}" class="btn-main1">Перейти до Адмін Меню</a>
+        {% endif %}
+    </main>
 </body>
 </html>

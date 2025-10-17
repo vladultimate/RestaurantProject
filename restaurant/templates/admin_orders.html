@@ -2,68 +2,132 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <title>Замовлення</title>
+    <title>Список Замовлень</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background: #fffbe5;
+            background: #fafafa;
             margin: 0;
-            padding: 20px;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            padding: 0;
+            color: #333;
+        }
+
+        header {
+            background: linear-gradient(135deg, #FFD54F 0%, #FFB300 100%);
+            padding: 20px 40px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #fff;
+            font-weight: bold;
+            font-size: 22px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        header .logo {
+            font-size: 26px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        header .subtitle {
+            font-size: 16px;
+            font-weight: normal;
+            opacity: 0.9;
         }
 
         h1 {
             text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .order-card {
-            background: #fff;
-            border-radius: 16px;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-
-        .order-header {
-            font-size: 18px;
+            margin: 30px 0 20px;
+            font-size: 30px;
             font-weight: bold;
-            margin-bottom: 12px;
+            color: #444;
         }
 
-        .order-header span {
-            font-weight: normal;
-            color: #555;
-            font-size: 14px;
+        .catalog {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 20px;
+            padding: 0 20px 40px;
+            max-width: 1300px;
+            margin: auto;
         }
 
-        .order-items {
+        .card {
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 10px 22px rgba(0,0,0,0.2);
+        }
+
+        .card h2 {
+            margin: 0;
+            font-size: 22px;
+            text-align: center;
+            color: #222;
+        }
+
+        .card-content {
             display: flex;
             flex-direction: column;
             gap: 10px;
-            margin-bottom: 12px;
+        }
+
+        .order-items {
+            margin-top: 10px;
+            border: 1px solid #eee;
+            border-radius: 12px;
+            overflow: hidden;
         }
 
         .order-item {
             display: flex;
             justify-content: space-between;
-            padding: 8px 12px;
-            border-radius: 12px;
-            background: #fff2b2;
+            padding: 10px 14px;
+            background: #fff;
+            border-bottom: 1px solid #f1f1f1;
+        }
+
+        .order-item:last-child {
+            border-bottom: none;
+        }
+
+        .order-item.header {
+            background: #fffbeb;
+            font-weight: bold;
+            border-bottom: 2px solid #f7e47c;
         }
 
         .order-item div {
             flex: 1;
             text-align: center;
+            font-size: 14px;
         }
 
-        .order-item div:first-child { text-align: left; flex: 2; }
+        .order-item div:first-child {
+            flex: 2;
+            text-align: left;
+        }
 
         .btn-confirm {
             display: block;
             width: 100%;
             padding: 12px 0;
-            border-radius: 9px;
-            font-size: 14px;
+            border-radius: 14px;
+            font-size: 15px;
             font-weight: bold;
             color: white;
             text-align: center;
@@ -71,12 +135,13 @@
             border: none;
             cursor: pointer;
             text-transform: uppercase;
-            transition: background 0.3s, transform 0.2s;
+            transition: all 0.3s ease;
         }
 
         .btn-confirm:hover {
             background: linear-gradient(135deg, #45a049 0%, #57a957 100%);
             transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
 
         .confirmed {
@@ -87,59 +152,120 @@
             padding: 12px 0;
         }
 
-        .order-header, .order-item div {
-            font-size: 14px;
+        .pagination {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .page-btn {
+            display: inline-block;
+            margin: 0 6px;
+            padding: 10px 15px;
+            border-radius: 50%;
+            background: #ffcc00;
+            color: black;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background 0.25s, transform 0.2s;
+        }
+
+        .page-btn:hover {
+            background: #ff9900;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .page-info {
+            margin: 0 12px;
+            font-weight: bold;
+        }
+        .btn-main {
+            display: block;
+            width: 240px;
+            margin: 50px auto 0 auto;
+            padding: 15px 0;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%);
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            font-size: 18px;
+            transition: all 0.3s;
+        }
+
+        .btn-main:hover {
+            background: linear-gradient(135deg, #45a049 0%, #57a957 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
         }
     </style>
 </head>
 <body>
+<header>
+    <div class="logo">🍴 Замовлення</div>
+    <div class="subtitle">Перегляд та підтвердження</div>
+</header>
 
 <h1>Список Замовлень</h1>
 
-{% for order_info in orders_data %}
-<div class="order-card" style="max-width:600px; margin:20px auto; padding:15px;">
-    <div class="order-header">
-        Замовлення #{{ order_info.order.id }} - 
-        {% if order_info.order.user %}
-            {{ order_info.order.user.username }}<br>
-            <span>Номер: {{ order_info.order.phone }}</span>
-        {% else %}
-            Guest
-        {% endif %}
-        <br>
-        <span>Сума: {{ order_info.order_total }} грн</span>
-    </div>
+<div class="catalog">
+    {% for order_info in page_obj %}
+    <div class="card">
+        <h2>Замовлення #{{ order_info.order.id }}</h2>
+        <div class="card-content">
+            <div><strong>👤 Користувач:</strong> {% if order_info.order.user %}{{ order_info.order.user.username }}{% else %}Гість{% endif %}</div>
+            <div><strong>📞 Телефон:</strong> {{ order_info.order.phone }}</div>
+            <div><strong>📍 Адреса:</strong> {{ order_info.order.address }}</div>
+            <div><strong>💰 Сума:</strong> {{ order_info.order_total }} грн {% if order_info.order.user %}(зі знижкою 10%) {% endif %}</div>
 
-    <div class="order-items">
-        <div class="order-item header" style="display:flex; gap:10px; font-weight:bold;">
-            <div style="flex:2;">Страва</div>
-            <div style="flex:1;">К-ть</div>
-            <div style="flex:1;">Ціна</div>
-            <div style="flex:1;">Сума</div>
-        </div>
-        {% for item in order_info.items %}
-        <div class="order-item" style="display:flex; gap:10px; background:#fff2b2; border-radius:8px; padding:5px;">
-            <div style="flex:2;">{{ item.dish.name }}</div>
-            <div style="flex:1; text-align:center;">{{ item.quantity }}</div>
-            <div style="flex:1; text-align:center;">{{ item.dish.price }} грн</div>
-            <div style="flex:1; text-align:center;">{{ item.total }} грн</div>
-        </div>
-        {% endfor %}
-    </div>
+            <div class="order-items">
+                <div class="order-item header">
+                    <div>Страва</div>
+                    <div>К-ть</div>
+                    <div>Ціна</div>
+                    <div>Сума</div>
+                </div>
+                {% for item in order_info.items %}
+                <div class="order-item">
+                    <div>{{ item.dish.name }}</div>
+                    <div>{{ item.quantity }}</div>
+                    <div>{{ item.dish.price }} грн</div>
+                    <div>{{ item.total }} грн</div>
+                </div>
+                {% endfor %}
+            </div>
 
-    <form method="post" style="margin-top:10px;">
-        {% csrf_token %}
-        <input type="hidden" name="order_id" value="{{ order_info.order.id }}">
-        {% if order_info.order.status != "confirmed" %}
-            <button type="submit" class="btn-confirm" style="width:auto; padding:8px 20px;">✅ Підтвердити</button>
-        {% else %}
-            <span class="confirmed">✅ Підтверджено</span>
-        {% endif %}
-    </form>
+            <form method="post" action="{% url 'confirm_order' %}">
+                {% csrf_token %}
+                <input type="hidden" name="order_id" value="{{ order_info.order.id }}">
+                {% if not order_info.order.confirmed %}
+                    <button type="submit" class="btn-confirm">✅ Підтвердити</button>
+                {% else %}
+                    <span class="confirmed">✅ Підтверджено</span>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+    {% empty %}
+    <p style="text-align:center;">Немає замовлень</p>
+    {% endfor %}
 </div>
-{% empty %}
-<p>Немає замовлень</p>
-{% endfor %}
+
+<div class="pagination">
+    {% if page_obj.has_previous %}
+        <a href="?page=1" class="page-btn">«</a>
+        <a href="?page={{ page_obj.previous_page_number }}" class="page-btn">‹</a>
+    {% endif %}
+
+    <span class="page-info">Сторінка {{ page_obj.number }} з {{ page_obj.paginator.num_pages }}</span>
+
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}" class="page-btn">›</a>
+        <a href="?page={{ page_obj.paginator.num_pages }}" class="page-btn">»</a>
+    {% endif %}
+    <a href="{% url 'menu' %}" class="btn-main">Повернутись Назад</a>
+</div>
 
 </body>
 </html>

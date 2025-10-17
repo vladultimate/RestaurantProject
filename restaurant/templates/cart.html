@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="uk">
 <head>
@@ -5,119 +6,167 @@
     <title>Кошик</title>
     <style>
         body {
-            background: rgb(255, 255, 219);
+            background: linear-gradient(135deg, #fffde7, #fff8dc);
             margin: 0;
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            color: #333;
         }
 
         header {
             background: linear-gradient(135deg, #FFD54F 0%, #FFB300 100%);
-            padding: 15px;
+            padding: 18px;
             text-align: center;
-            font-size: 24px;
+            font-size: 26px;
             font-weight: bold;
-            box-shadow: 0 4px 10px rgba(255, 181, 0, 0.4);
-        }
-
-        .catalog {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: flex-start;
-            gap: 20px;
-            padding: 20px;
-        }
-
-        .card {
-            width: 280px;
-            background: linear-gradient(135deg, #FFD54F 0%, #FFB300 100%);
-            border-radius: 20px;
             box-shadow: 0 4px 15px rgba(255, 181, 0, 0.4);
-            overflow: hidden;
             display: flex;
-            flex-direction: column;
-        }
-
-        .card-content {
-            padding: 15px;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
             justify-content: space-between;
+            align-items: center;
+            color: #222;
         }
 
-        .card h3 {
-            margin: 0 0 10px 0;
-            font-size: 20px;
-            text-align: center;
+        .cart-table {
+            width: 70%; /* 🔹 робимо вже */
+            margin: 30px auto;
+            border-collapse: collapse;
+            background: #fff;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+            animation: fadeIn 0.6s ease-in-out;
         }
 
-        .card p {
-            font-size: 14px;
-            flex-grow: 1;
+        .cart-table th {
+            background: linear-gradient(135deg, #FFD54F 0%, #FFB300 100%);
+            padding: 14px;
             text-align: center;
+            font-size: 16px;
+            color: #222;
+        }
+
+        .cart-table td {
+            padding: 14px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+            font-size: 15px;
+        }
+
+        .cart-table tr:nth-child(even) {
+            background-color: #fffdf3;
         }
 
         .price {
-            font-size: 18px;
             font-weight: bold;
-            margin: 10px 0;
-            text-align: center;
+            color: #E65100;
         }
 
         .availability {
-            font-size: 14px;
             color: green;
-            text-align: left;
+            font-size: 14px;
+            font-weight: bold;
         }
 
-        .btn {
-            display: inline-block;
-            padding: 10px 20px;
-            border-radius: 8px;
-            color: white;
-            text-decoration: none;
-            background-color: #FF9800;
-            border: none;
-            cursor: pointer;
-        }
-
-        .btn:hover {
-            background-color: #F57C00;
+        .cart-img {
+            border-radius: 10px;
+            width: 120px;   
+            height: auto;   
         }
 
         .total {
             font-size: 20px;
             font-weight: bold;
             text-align: right;
-            margin: 20px;
+            margin: 20px 15% 10px 0; 
+            color: #444;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 22px;
+            border-radius: 10px;
+            color: white;
+            text-decoration: none;
+            background: linear-gradient(135deg, #FF6F00, #FF9800);
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 10px rgba(255, 152, 0, 0.4);
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #FF8F00, #FFB74D);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 14px rgba(255, 152, 0, 0.6);
+        }
+
+        .btn-wrapper {
+            text-align: right;
+            margin: 0 15% 40px 0;
+        }
+
+        p.empty {
+            text-align: center;
+            margin-top: 60px;
+            font-size: 18px;
+            color: #777;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
     <header>
-        🛒 Ваш кошик
+        <span>🛒 Ваш кошик</span>
+        <a href="{% url 'menu' %}" class="btn">⬅ До меню</a>
     </header>
 
-    <div class="catalog">
+    {% if cart_items %}
+    <table class="cart-table">
+        <tr>
+            <th>Зображення</th>
+            <th>Назва</th>
+            <th>Опис</th>
+            <th>Кількість</th>
+            <th>Ціна</th>
+            <th>Наявність</th>
+        </tr>
         {% for item in cart_items %}
-        <div class="card">
-            <div class="card-content">
-                <h3>{{ item.dish.name }}</h3>
-                <p>{{ item.dish.description }}</p>
-                <div class="price">{{ item.dish.price }} грн × {{ item.quantity }}</div>
-                <div class="availability">В наявності</div>
-            </div>
-        </div>
-        {% empty %}
-        <p>Кошик порожній</p>
+        <tr>
+            <td>
+                <img src="{{ item.dish.image.url }}" alt="{{ item.dish.name }}" class="cart-img">
+            </td>
+            <td>{{ item.dish.name }}</td>
+            <td>{{ item.dish.description }}</td>
+            <td>{{ item.quantity }}</td>
+            <td class="price">{{ item.dish.price }} грн</td>
+            <td class="availability">В наявності</td>
+        </tr>
         {% endfor %}
+    </table>
+
+    <div class="total">
+        {% if discount_price %}
+            <span style="text-decoration: line-through; color: #999;">
+                {{ total_price }} грн
+            </span><br>
+            <span style="color: green;">
+                Зі знижкою (10%): <b>{{ discount_price }} грн</b>
+            </span>
+        {% else %}
+            Загальна сума: {{ total_price }} грн
+        {% endif %}
     </div>
 
-    {% if cart_items %}
-    <div class="total">Загальна сума: {{ total_price }} грн</div>
-    <div style="text-align: right; margin: 0 20px 20px 20px;">
-        <a href="{% url 'checkout' %}" class="btn">Оформити замовлення</a>
+    <div class="btn-wrapper">
+        <a href="{% url 'checkout' %}" class="btn">✅ Оформити замовлення</a>
     </div>
+    {% else %}
+    <p class="empty">Кошик порожній 🛍️</p>
     {% endif %}
 </body>
 </html>

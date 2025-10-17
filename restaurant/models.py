@@ -20,7 +20,7 @@ class Dish(models.Model):
 class Feedback(models.Model):
     rating = models.IntegerField()
     description = models.CharField(max_length=250)
-    dishes = models.ManyToManyField(Dish)
+    dishes = models.ManyToManyField(Dish, related_name='feedbacks')
     author = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
@@ -49,9 +49,14 @@ class Order(models.Model):
     address = models.CharField(max_length=255)
     total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     created_at = models.DateTimeField(auto_now_add=True)
+    confirmed = models.BooleanField(default=False)
 
     def calculate_total(self):
-        return sum(item.dish.price * item.quantity for item in self.items.all())
+        subtotal = sum(item.dish.price * item.quantity for item in self.items.all())
+        if self.user:
+            subtotal = subtotal - (subtotal * 0.10)
+
+        return subtotal
 
     def save(self, *args, **kwargs):
         self.total_price = self.calculate_total() if self.pk else self.total_price

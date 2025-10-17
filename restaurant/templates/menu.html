@@ -5,20 +5,24 @@
     <title>Меню</title>
     <style>
         body {
-            background: #fffbe5;
+            background: #fff8e1;
             margin: 0;
             font-family: 'Arial', sans-serif;
         }
 
         header {
             background: linear-gradient(135deg, #FFD54F 0%, #FFB300 100%);
-            padding: 12px;
-            text-align: center;
-            font-size: 24px;
-            font-weight: bold;
+            padding: 16px 20px;
+            display: flex;
             justify-content: space-between;
+            align-items: center;
+            font-size: 20px;
+            font-weight: bold;
             color: #333;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 4px 12px rgba(255,181,0,0.45);
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
 
         header .logo {
@@ -34,32 +38,33 @@
         .catalog {
             display: flex;
             flex-wrap: wrap;
-            gap: 12px;
-            padding: 10px;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
         }
 
         .card {
             width: 280px;
             background: #fff;
             border-radius: 16px;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            text-align: center;
         }
 
         .card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.25);
+            transform: translateY(-6px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.25);
         }
 
         .card img {
             width: 100%;
             height: 200px;
             object-fit: cover;
-            display: block;
-            margin: 0;
             border-top-left-radius: 16px;
             border-top-right-radius: 16px;
             transition: transform 0.3s ease;
@@ -69,28 +74,19 @@
             transform: scale(1.05);
         }
 
-        .card-content {
-            padding: 6px 10px;
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-        }
-
-        .card h3 {
-            margin: 0 0 4px 0;
+        .card h2 {
+            margin: 10px 0 6px 0;
             font-size: 20px;
             font-weight: bold;
             color: #222;
-            text-align: center;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
         .card p {
-            margin: 0 0 6px 0;
-            font-size: 13px;
-            color: #666;
-            line-height: 1.3;
+            margin: 0 0 8px 0;
+            font-size: 14px;
+            color: #555;
+            line-height: 1.4;
         }
 
         .price {
@@ -99,126 +95,161 @@
             color: white;
             font-weight: bold;
             font-size: 16px;
-            padding: 6px 12px;
+            padding: 6px 14px;
             border-radius: 16px;
-            text-align: center;
             margin: 6px auto;
             box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-            position: relative;
-            overflow: hidden;
         }
 
-        .price::after {
-            content: '';
+        .card-buttons {
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: rgba(255,255,255,0.2);
-            transform: rotate(25deg);
-            transition: all 0.5s;
-        }
-
-        .availability {
-            font-size: 13px;
-            color: green;
-            text-align: center;
-            margin-bottom: 8px;
-        }
-
-        form {
+            top: 8px;
+            right: 8px;
             display: flex;
-            flex-direction: column;
-            gap: 6px;
+            gap: 8px;
         }
 
-        input[type="number"],
-        input[type="text"] {
-            padding: 6px;
-            font-size: 13px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-        }
-        
-         header {
-            background: linear-gradient(135deg, #FFD54F 0%, #FFB300 100%);
-            padding: 16px;
-            text-align: center;
-            font-size: 28px;
-            font-weight: bold;
-            color: #333;
-            box-shadow: 0 4px 12px rgba(255,181,0,0.45);
-            letter-spacing: 1px;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-
-        
-        .btn {
-            display: block;
-            width: 100%;
-            padding: 12px 0;
-            border-bottom-left-radius: 16px;
-            border-bottom-right-radius: 16px;
-            font-size: 14px;
-            font-weight: bold;
-            color: white;
-            text-align: center;
-            background: linear-gradient(135deg, #FF6F00 0%, #FF9800 100%);
+        .card-buttons button {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
             border: none;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            opacity: 1;
+            transition: opacity 0.2s, transform 0.2s;
+        }
+
+        .card:hover .card-buttons button {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        .delete-btn {
+            background: rgba(255, 80, 80, 0.7);
+            color: white;
+        }
+
+        .delete-feedbacks-btn {
+            background: rgba(80, 160, 255, 0.7);
+            color: white;
+        }
+        .delete-feedbacks-btn1 {
+            background: rgba(255, 238, 80, 0.7);
+            color: white;
+        }
+
+        .quantity-selector {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 10px 0;
+        }
+
+        .quantity-selector button {
+            background: linear-gradient(135deg, #FF9800 0%, #FF6F00 100%);
+            color: white;
+            border: none;
+            width: 32px;
+            height: 32px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 8px;
             cursor: pointer;
             transition: background 0.3s, transform 0.2s;
-            margin-top: auto;
-            text-transform: uppercase;
         }
 
-        .btnadd {
+        .quantity-selector button:hover {
+            background: linear-gradient(135deg, #FFB74D 0%, #FF8F00 100%);
+            transform: scale(1.1);
+        }
+
+        .quantity-selector input {
+            width: 50px;
+            text-align: center;
+            font-size: 16px;
+            margin: 0 6px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            padding: 4px;
+        }
+
+        .btn {
             display: block;
-            width: 100%;
-            padding: 12px 0;
-            border-radius: 9px;
+            width: 80%;
+            margin: 0 auto 10px auto;
+            padding: 10px 0;
+            border-radius: 12px;
             font-size: 14px;
             font-weight: bold;
             color: white;
-            text-align: center;
             background: linear-gradient(135deg, #FF6F00 0%, #FF9800 100%);
             border: none;
             cursor: pointer;
-            margin-top: auto;
             text-transform: uppercase;
+            transition: background 0.3s, transform 0.2s;
         }
 
         .btn:hover {
             background: linear-gradient(135deg, #FF8F00 0%, #FFB74D 100%);
-        }
-        .delete-btn {
-            position: absolute;
-            top: 8px;      
-            right: 8px;      
-            background: rgba(255, 125, 125, 0.2);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            opacity: 0;     
-            transition: opacity 0.2s, transform 0.2s;
-        }
-
-        .card:hover .delete-btn {
-            opacity: 1;   
-            transform: scale(1.1);
-        }
-
-        .submit:hover {
-            background: linear-gradient(135deg, #ff8f00, #ffb74d);
             transform: translateY(-2px);
         }
+
+        .btnadd {
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: bold;
+            color: white;
+            text-align: center;
+            background: linear-gradient(135deg, #FF6F00 0%, #FF9800 100%);
+            border: none;
+            cursor: pointer;
+            text-transform: uppercase;
+            text-decoration: none;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .btnadd:hover {
+            background: linear-gradient(135deg, #FF8F00 0%, #FFB74D 100%);
+            transform: translateY(-2px);
+        }
+
+        .admin-buttons {
+            margin: 20px auto;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .admin-buttons .btnadd {
+            width: auto;
+            padding: 12px 20px;
+        }
+        .btn-main12 {
+            display: block;
+            width: 240px;
+            margin: 50px auto 0 auto;
+            padding: 15px 0;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%);
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            font-size: 18px;
+            transition: all 0.3s;
+        }
+
+        .btn-main12:hover {
+            background: linear-gradient(135deg, #45a049 0%, #57a957 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+        }
+
     </style>
 </head>
 <body>
@@ -227,47 +258,78 @@
         <div class="contacts">
             📞 +3808888888 | ✉ brawlstars@gmail.com
         </div>
+        <form action="{% url 'cart_view' %}" method="get" style="margin:0;">
+            <button type="submit" class="btnadd">🛒 Кошик</button>
+        </form>
     </header>
 
     <div class="catalog">
         {% for dish in dishes %}
         <div class="card">
             <img src="{{ dish.image.url }}" alt="{{ dish.name }}">
-            {% if request.user.is_authenticated and user.profile.role == 'admin' %}
-                <button class="delete-btn" onclick="location.href='{% url 'delete_dish' dish.id %}'">×</button>
-            {% endif %}
-            <h2>{{ dish.name }}</h2>
-            <div class="card-content">
-                <p>{{ dish.description }}</p>
-                <p>{{ dish.category.name }}</p>
-                <div class="price">{{ dish.price }} грн</div>
-                {% if request.user.is_authenticated %}
-                    {% if user.profile.role == 'admin' %}
-                        <form method="get" action="{% url 'edit_dish' dish.id %}">
-                            <a href="{% url 'edit_dish' dish.id %}" >Редагувати</a>
-                        </form>
-                    {% endif %}
+
+            {% if request.user.is_authenticated %}
+            <div class="card-buttons">
+                {% if user.profile.role == 'admin' %}
+                <button class="delete-btn" onclick="location.href='{% url 'delete_dish' dish.id %}'">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="white" viewBox="0 0 24 24">
+                        <path d="M9 3v1H4v2h16V4h-5V3H9zm1 6v10h2V9h-2zm4 0v10h2V9h-2z"/>
+                    </svg>
+                </button>
+                <button class="delete-feedbacks-btn1" onclick="location.href='{% url 'edit_dish' dish.id %}'">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="white" viewBox="0 0 24 24">
+                        <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM21.41 
+                                6.34a1.25 1.25 0 0 0 0-1.77l-2.34-2.34a1.25 
+                                1.25 0 0 0-1.77 0l-1.83 1.83 3.75 
+                                3.75 2.19-2.19z"/>
+                    </svg>
+                </button>
                 {% endif %}
+                <button class="delete-feedbacks-btn" onclick="location.href='{% url 'feedback_list' dish.id %}'">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="white" viewBox="0 0 24 24">
+                        <path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/>
+                    </svg>
+                </button>
             </div>
+            {% endif %}
+
+            <h2>{{ dish.name }}</h2>
+            <p>{{ dish.description }}</p>
+            <p>{{ dish.category.name }}</p>
+            <div class="price">{{ dish.price }} грн</div>
+
+            {% if dish.avg_rating %}
+                ⭐ {{ dish.avg_rating }} / 5
+            {% else %}
+                ⭐ Немає відгуків
+            {% endif %}
+
             <form action="{% url 'add_to_cart' %}" method="post">
-                    {% csrf_token %}
-                    <input type="hidden" name="dish_id" value="{{ dish.id }}">
+                {% csrf_token %}
+                <input type="hidden" name="dish_id" value="{{ dish.id }}">
+
+                <div class="quantity-selector">
+                    <button type="button" onclick="this.nextElementSibling.stepDown()">-</button>
                     <input type="number" name="quantity" value="1" min="1">
-                    {% if not request.user.is_authenticated %}
-                        <input type="text" name="phone" placeholder="Ваш телефон" required>
-                    {% endif %}
-                    <button type="submit" class="btn">Додати в кошик</button>
-                </form>
+                    <button type="button" onclick="this.previousElementSibling.stepUp()">+</button>
+                </div>
+
+                <button type="submit" class="btn">Додати в кошик</button>
+            </form>
+
         </div>
         {% empty %}
         <p>Немає страв</p>
         {% endfor %}
-        {% if request.user.is_authenticated %}
-            {% if user.profile.role == 'admin' %}
-                <a href="{% url 'create_dish' %}" class="btnadd">Створити їжу</a>
-                <a href="{% url 'create_category' %}" class="btnadd">Створити Категорію</a>
-            {% endif %}
-        {% endif %}
     </div>
+    <div class="admin-buttons">
+        <a href="{% url 'home' %}" class="btn-main12">Головна сторінка</a>
+    </div>
+    {% if request.user.is_authenticated and user.profile.role == 'admin' %}
+    <div class="admin-buttons">
+        <a href="{% url 'create_dish' %}" class="btnadd">Створити їжу</a>
+        <a href="{% url 'create_category' %}" class="btnadd">Створити Категорію</a>
+    </div>
+    {% endif %}
 </body>
 </html>

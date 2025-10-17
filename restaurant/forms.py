@@ -1,5 +1,5 @@
 from django import forms
-from .models import Dish, Category, Order
+from .models import Dish, Category, Order, Feedback
 
 class LoginForm(forms.Form):
     username = forms.CharField(max_length=100)
@@ -48,3 +48,12 @@ class CategoryEditForm(forms.ModelForm):
     class Meta:
         model = Category
         fields = ['name']
+
+class FeedbackForm(forms.ModelForm):
+    class Meta:
+        model = Feedback
+        fields = ['description', 'rating'] 
+        widgets = {
+            'description': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Напишіть відгук...'}),
+            'rating': forms.NumberInput(attrs={'min': 1, 'max': 5})
+        }
